@@ -1,0 +1,6 @@
+{
+    "watch": ["src"],
+    "ext": "ts,js,json",
+    "exec": "pnpm exec ts-node -r dotenv/config src/basics/server.ts",
+    "ignore": ["node_modules/**"]
+}
