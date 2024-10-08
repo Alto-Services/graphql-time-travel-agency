@@ -58,7 +58,7 @@ test('Query all travelers', async () => {
     });
 });
 
-test.skip('Query a traveler by ID', async () => {
+test('Query a traveler by ID', async () => {
     // https://www.apollographql.com/docs/apollo-server/data/resolvers#defining-a-resolver
     const query = gql`
         query {
