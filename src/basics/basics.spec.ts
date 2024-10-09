@@ -152,7 +152,7 @@ test('Create a new booking', async () => {
     });
 });
 
-test.skip('Implement resolvers required for Person interface to work', async () => {
+test('Implement resolvers required for Person interface to work', async () => {
     // https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
         query {

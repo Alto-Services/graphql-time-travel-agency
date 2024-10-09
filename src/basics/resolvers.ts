@@ -12,6 +12,17 @@ export const resolvers = {
             return 'Error';
         },
     },
+    Person: {
+        __resolveType: (obj: object) => {
+            if ('eraOfOrigin' in obj) {
+                return 'Traveler';
+            }
+            if('expertise' in obj) {
+                return 'Guide';
+            }
+            return 'Error';
+        }
+    },
     Booking: bookingResolvers(),
     Traveler: travelerResolvers(),
     Query: {
