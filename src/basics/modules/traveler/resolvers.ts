@@ -10,4 +10,7 @@ export const travelerResolvers = () => ({
     eraOfOrigin: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
         return parent.eraOfOrigin ?? getTravelerById(parent.id)?.eraOfOrigin;
     },
+    id: (parent: TravelerResolverParent, _: unknown, { getTravelerById }: Context) => {
+     return parent.id ?? getTravelerById(parent.id)?.id;
+    }
 });
