@@ -9,7 +9,7 @@ export const resolvers = {
             if ('id' in obj) {
                 return 'Booking';
             }
-            return 'Error';
+            return 'ErrorMessage';
         },
     },
     Person: {
@@ -20,7 +20,7 @@ export const resolvers = {
             if('expertise' in obj) {
                 return 'Guide';
             }
-            return 'Error';
+            return 'ErrorMessage';
         }
     },
     Booking: bookingResolvers(),

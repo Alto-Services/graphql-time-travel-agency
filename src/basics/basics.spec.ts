@@ -207,7 +207,7 @@ test('Implement resolvers required for Person interface to work', async () => {
     });
 });
 
-test.skip('Find why ErrorMessage is not resolving', async () => {
+test('Find why ErrorMessage is not resolving', async () => {
     const mutation = gql`
         mutation ($input: BookingInput!) {
             createBooking(input: $input) {
