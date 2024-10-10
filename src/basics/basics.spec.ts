@@ -96,7 +96,7 @@ test('Query a traveler by ID', async () => {
     });
 });
 
-test.skip('Create a new booking', async () => {
+test('Create a new booking', async () => {
     // https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
     const mutation = gql`
         mutation ($input: BookingInput!) {
@@ -106,9 +106,9 @@ test.skip('Create a new booking', async () => {
                     traveler {
                         name
                     }
-                    # timePeriod {
-                    #     name
-                    # }
+                    timePeriod {
+                        name
+                    }
                     status
                 }
             }
