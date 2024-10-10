@@ -246,3 +246,87 @@ test('Find why ErrorMessage is not resolving', async () => {
         },
     });
 });
+
+test.skip('Get travelers bookings', async () => {
+    // take a look at how resolvers pass their data to each other
+    const query = gql`
+        query {
+            traveler(id: "1") {
+                id
+                activeBookings {
+                    id
+                    traveler {
+                        id
+                    }
+                }
+            }
+        }
+    `;
+    const { body } = await server.executeOperation(
+        {
+            query,
+            variables: {},
+        },
+        {
+            contextValue: {
+                ...baseContext,
+            },
+        },
+    );
+
+    expect(body).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                traveler: {
+                    activeBookings: [
+                        {
+                            id: '1',
+                            traveler: {
+                                id: '1',
+                            },
+                        },
+                    ],
+                    id: '1',
+                },
+            },
+            errors: undefined,
+        },
+    });
+});
+
+test.skip("Get traveler's name in all CAPs", async () => {
+    const query = gql`
+        query ($id: ID!, $toUpperCase: Boolean!) {
+            traveler(id: $id) {
+                name(toUpperCase: $toUpperCase)
+            }
+        }
+    `;
+    const { body } = await server.executeOperation(
+        {
+            query,
+            variables: {
+                id: '1',
+                toUpperCase: true,
+            },
+        },
+        {
+            contextValue: {
+                ...baseContext,
+            },
+        },
+    );
+
+    expect(body).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                traveler: {
+                    name: 'JOHN DOE',
+                },
+            },
+            errors: undefined,
+        },
+    });
+});
