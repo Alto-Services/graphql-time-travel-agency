@@ -4,7 +4,7 @@ export const schema = gql`
     # 1. Basic Types
     type Traveler {
         id: ID!
-        name: String!
+        name(toUpperCase: Boolean): String!
         eraOfOrigin: Era!
         activeBookings: [Booking!]!
     }
