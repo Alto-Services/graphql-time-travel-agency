@@ -10,7 +10,7 @@ beforeAll(async () => {
     baseContext = await context();
 });
 
-test('travelers resolvers should do only one DB call', async () => {
+test.skip('travelers resolvers should do only one DB call', async () => {
     // we have to solve famous n+1 problem (https://www.perplexity.ai/search/graphql-n-1-rljXqKj.Sr634KQA3qNlgg)
     //
     // READ: https://www.npmjs.com/package/dataloader

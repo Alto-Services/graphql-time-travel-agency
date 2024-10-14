@@ -247,7 +247,7 @@ test('Find why ErrorMessage is not resolving', async () => {
     });
 });
 
-test.skip('Get travelers bookings', async () => {
+test('Get travelers bookings', async () => {
     // take a look at how resolvers pass their data to each other
     const query = gql`
         query {
