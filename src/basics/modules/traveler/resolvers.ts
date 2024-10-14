@@ -6,9 +6,14 @@ import { getBookingById } from '../booking/model';
 type TravelerResolverParent = { id: string } & Partial<Traveler>; // why is this a partial type, as top level query will get the whole object
 
 export const travelerResolvers = () => ({
-    // do i need this method as the top level query returns same type
-    name: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
-        return parent.name ?? getTravelerById(parent.id)?.name;
+    name: (parent: TravelerResolverParent, args: { toUppercase?: boolean }, { getTravelerById }: Context) => {
+        const name = parent.name ?? getTravelerById(parent.id)?.name;
+
+        if (args.toUppercase) {
+            return name?.toUpperCase();
+        }
+
+        return name
     },
         // do i need this method as the top level query returns same type
     eraOfOrigin: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
