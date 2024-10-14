@@ -1,4 +1,4 @@
-import { beforeAll, expect, test } from 'vitest';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { gql } from 'graphql-tag';
 import { server } from './server';
 import { Context, context } from './context';
@@ -9,6 +9,9 @@ beforeAll(async () => {
     baseContext = await context();
 });
 
+afterAll(() => {
+    server.stop()
+})
 test('Query all travelers', async () => {
     const query = gql`
         query {
