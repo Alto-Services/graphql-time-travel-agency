@@ -15,7 +15,7 @@ export const travelerResolvers = () => ({
         return parent.eraOfOrigin ?? getTravelerById(parent.id)?.eraOfOrigin;
     },
     activeBookings: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
-        // should I be checking that activeBookings is already an object type?
+        // should I be checking whether activeBookings is not already an object type before retreiving?
         return parent.activeBookings?.map(bookingId => getBookingById(bookingId));
     }
 });
