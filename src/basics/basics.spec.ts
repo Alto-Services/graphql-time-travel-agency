@@ -61,7 +61,7 @@ test('Query all travelers', async () => {
     });
 });
 
-test.skip('Query a traveler by ID', async () => {
+test('Query a traveler by ID', async () => {
     // https://www.apollographql.com/docs/apollo-server/data/resolvers#defining-a-resolver
     const query = gql`
         query {
@@ -99,7 +99,7 @@ test.skip('Query a traveler by ID', async () => {
     });
 });
 
-test.skip('Create a new booking', async () => {
+test('Create a new booking', async () => {
     // https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
     const mutation = gql`
         mutation ($input: BookingInput!) {
@@ -109,9 +109,9 @@ test.skip('Create a new booking', async () => {
                     traveler {
                         name
                     }
-                    # timePeriod {
-                    #     name
-                    # }
+                    timePeriod {
+                        name
+                    }
                     status
                 }
             }
@@ -155,7 +155,7 @@ test.skip('Create a new booking', async () => {
     });
 });
 
-test.skip('Implement resolvers required for Person interface to work', async () => {
+test('Implement resolvers required for Person interface to work', async () => {
     // https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
         query {
@@ -210,7 +210,7 @@ test.skip('Implement resolvers required for Person interface to work', async () 
     });
 });
 
-test.skip('Find why ErrorMessage is not resolving', async () => {
+test('Find why ErrorMessage is not resolving', async () => {
     const mutation = gql`
         mutation ($input: BookingInput!) {
             createBooking(input: $input) {
@@ -250,7 +250,7 @@ test.skip('Find why ErrorMessage is not resolving', async () => {
     });
 });
 
-test.skip('Get travelers bookings', async () => {
+test('Get travelers bookings', async () => {
     // take a look at how resolvers pass their data to each other
     const query = gql`
         query {
@@ -298,7 +298,7 @@ test.skip('Get travelers bookings', async () => {
     });
 });
 
-test.skip("Get traveler's name in all CAPs", async () => {
+test("Get traveler's name in all CAPs", async () => {
     const query = gql`
         query ($id: ID!, $toUpperCase: Boolean!) {
             traveler(id: $id) {

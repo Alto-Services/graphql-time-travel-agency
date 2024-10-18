@@ -12,7 +12,7 @@ export const server = new ApolloServer({
 
 const main = async () => {
     const { url } = await startStandaloneServer(server, {
-        listen: { port: 10101 },
+        listen: { port: 10102 },
         context,
     });
 

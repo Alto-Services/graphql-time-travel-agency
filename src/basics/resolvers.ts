@@ -9,7 +9,18 @@ export const resolvers = {
             if ('id' in obj) {
                 return 'Booking';
             }
-            return 'Error';
+            return 'ErrorMessage';
+        },
+    },
+    Person: {
+        __resolveType: (obj: object) => {
+            if ('eraOfOrigin' in obj) {
+                return 'Traveler';
+            }
+            if ('expertise' in obj) {
+                return 'Guide';
+            }
+            return 'Person';
         },
     },
     Booking: bookingResolvers(),

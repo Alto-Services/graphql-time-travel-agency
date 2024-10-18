@@ -4,10 +4,10 @@ import { Traveler } from './model';
 type TravelerResolverParent = { id: string } & Partial<Traveler>;
 
 export const travelerResolvers = () => ({
-    name: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
-        return parent.name ?? getTravelerById(parent.id)?.name;
+    name: async (parent: TravelerResolverParent, args: unknown, { travelerLoader }: Context) => {
+        return parent.name ?? (await travelerLoader.load(parent.id))?.name;
     },
-    eraOfOrigin: (parent: TravelerResolverParent, args: unknown, { getTravelerById }: Context) => {
-        return parent.eraOfOrigin ?? getTravelerById(parent.id)?.eraOfOrigin;
+    eraOfOrigin: async (parent: TravelerResolverParent, args: unknown, { travelerLoader }: Context) => {
+        return parent.eraOfOrigin ?? (await travelerLoader.load(parent.id))?.eraOfOrigin;
     },
 });

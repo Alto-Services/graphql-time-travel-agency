@@ -45,6 +45,7 @@ export const createBooking = (booking: {
 }) => {
     idCounter += 1;
     bookings.set(`${idCounter}`, { ...booking, id: `${idCounter}` });
+    console.log('set mutation');
 
     return bookings.get(`${idCounter}`);
 };
