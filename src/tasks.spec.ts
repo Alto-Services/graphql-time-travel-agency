@@ -1,13 +1,11 @@
-import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
 import { gql } from 'graphql-tag';
-import { server } from './server';
-import { Context, context } from './context';
+import { IncomingMessage } from 'http';
+import { afterAll, beforeEach, expect, test } from 'vitest';
+import { context } from './context';
 import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
-
-let baseContext: Context;
+import { server } from './server';
 
 beforeEach(async () => {
-    baseContext = await context();
     __resetBookingDbCallCounter();
 });
 
@@ -32,9 +30,7 @@ test('Query all travelers', async () => {
             variables: {},
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -83,9 +79,7 @@ test('Query a traveler by ID', async () => {
             variables: {},
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -135,9 +129,7 @@ test.skip('Create a new booking', async () => {
             },
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -184,9 +176,7 @@ test.skip('Find why BookingError is not resolving', async () => {
             },
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -203,7 +193,7 @@ test.skip('Find why BookingError is not resolving', async () => {
     });
 });
 
-test.skip('Implement resolvers required for Person interface to work', async () => {
+test.skip('Implement the Person interface', async () => {
     // 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
@@ -225,9 +215,7 @@ test.skip('Implement resolvers required for Person interface to work', async () 
             variables: {},
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -259,7 +247,7 @@ test.skip('Implement resolvers required for Person interface to work', async () 
     });
 });
 
-test.skip('Get travelers bookings', async () => {
+test.skip('Get a travelers bookings', async () => {
     // 🔧 TASK: Implement resolver chains for the traveler's active bookings
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
     const query = gql`
@@ -281,9 +269,7 @@ test.skip('Get travelers bookings', async () => {
             variables: {},
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -308,8 +294,96 @@ test.skip('Get travelers bookings', async () => {
     });
 });
 
-test.skip("Get traveler's name in all CAPs", async () => {
-    // 🔧 TASK: Implement resolver argument handling
+test.skip('Get bookings for an authenticated user', async () => {
+    // 🔧 TASK: Implement authentication and authorization for the bookings query
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/security/authentication#putting-authenticated-user-info-in-your-contextvalue
+    const query = gql`
+        query {
+            bookings {
+                id
+                status
+                traveler {
+                    id
+                    name
+                }
+            }
+        }
+    `;
+
+    const { body: unauthenticated } = await server.executeOperation(
+        {
+            query,
+            variables: {},
+        },
+        {
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
+        },
+    );
+
+    // 1. Unauthenticated user should not see any bookings
+    expect(unauthenticated).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: null,
+            errors: [
+                {
+                    message: 'Authentication required',
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                    },
+                    locations: [
+                        {
+                            column: 3,
+                            line: 2,
+                        },
+                    ],
+                    path: ['bookings'],
+                },
+            ],
+        },
+    });
+
+    // 2. Authenticated user should only see their own bookings
+    const { body: authenticated } = await server.executeOperation(
+        {
+            query,
+            variables: {},
+        },
+        {
+            contextValue: await context({ req: { headers: { authorization: '#traveler2' } } as IncomingMessage }),
+        },
+    );
+
+    expect(authenticated).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                bookings: [
+                    {
+                        id: '#booking2',
+                        status: 'PENDING',
+                        traveler: {
+                            id: '#traveler2',
+                            name: 'Jane Smith',
+                        },
+                    },
+                    {
+                        id: '#booking3',
+                        status: 'CANCELLED',
+                        traveler: {
+                            id: '#traveler2',
+                            name: 'Jane Smith',
+                        },
+                    },
+                ],
+            },
+            errors: undefined,
+        },
+    });
+});
+
+test.skip('Get the travelers name in all CAPs', async () => {
+    // 🔧 TASK: Implement resolver argument handling for the traveler query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
     const query = gql`
         query ($id: ID!, $toUpperCase: Boolean!) {
@@ -328,9 +402,7 @@ test.skip("Get traveler's name in all CAPs", async () => {
             },
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
@@ -348,8 +420,8 @@ test.skip("Get traveler's name in all CAPs", async () => {
     });
 });
 
-test.skip('Get booking should do only one DB call for a booking', async () => {
-    // 🔧 TASK: Solve the n+1 problem
+test.skip('Optimize database calls for a booking', async () => {
+    // 🔧 TASK: Solve the n+1 problem for the booking query
     // 📖 REFERENCE: https://www.npmjs.com/package/dataloader
     const query = gql`
         query {
@@ -370,9 +442,7 @@ test.skip('Get booking should do only one DB call for a booking', async () => {
             variables: {},
         },
         {
-            contextValue: {
-                ...baseContext,
-            },
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
         },
     );
 
