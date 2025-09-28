@@ -1,19 +1,19 @@
 const events = new Map();
 
-events.set('1', {
-    id: '1',
+events.set('#event1', {
+    id: '#event1',
     title: 'Construction of the Pyramids',
     date: '2580 BC',
 });
 
-events.set('2', {
-    id: '2',
+events.set('#event2', {
+    id: '#event2',
     title: 'The Great Sphinx is Built',
     date: '2500 BC',
 });
 
-events.set('3', {
-    id: '3',
+events.set('#event3', {
+    id: '#event3',
     title: 'The Black Plague Sweeps Europe',
     date: '1347 AD',
 });

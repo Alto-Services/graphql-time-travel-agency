@@ -19,7 +19,7 @@
         "types": ["vitest/globals"],
         "typeRoots": ["./node_modules/@types", "./src/types", "./src/middlewares/expressContext.d.ts"]
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src"],
     "ts-node": {
         "swc": true
     }

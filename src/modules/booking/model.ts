@@ -7,23 +7,23 @@ export type Booking = {
 
 const bookings = new Map<string, Booking>();
 
-bookings.set('1', {
-    id: '1',
-    traveler: '1',
+bookings.set('#booking1', {
+    id: '#booking1',
+    traveler: '#traveler1',
     timePeriod: '1',
     status: 'CONFIRMED',
 });
 
-bookings.set('2', {
-    id: '2',
-    traveler: '2',
+bookings.set('#booking2', {
+    id: '#booking2',
+    traveler: '#traveler2',
     timePeriod: '2',
     status: 'PENDING',
 });
 
-bookings.set('3', {
-    id: '3',
-    traveler: '2',
+bookings.set('#booking3', {
+    id: '#booking3',
+    traveler: '#traveler2',
     timePeriod: '3',
     status: 'CANCELLED',
 });
@@ -34,7 +34,13 @@ export const getAllBookings = () => {
     return Array.from(bookings.values());
 };
 
+let __bookingDbCallCounter = 0;
+
+export const __getBookingDbCallCounter = () => __bookingDbCallCounter;
+export const __resetBookingDbCallCounter = () => (__bookingDbCallCounter = 0);
+
 export const getBookingById = (id: string) => {
+    __bookingDbCallCounter++;
     return bookings.get(id);
 };
 
@@ -44,7 +50,8 @@ export const createBooking = (booking: {
     status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 }) => {
     idCounter += 1;
-    bookings.set(`${idCounter}`, { ...booking, id: `${idCounter}` });
+    const newBooking = { ...booking, id: `#booking${idCounter}` };
+    bookings.set(`#booking${idCounter}`, newBooking);
 
-    return bookings.get(`${idCounter}`);
+    return newBooking;
 };

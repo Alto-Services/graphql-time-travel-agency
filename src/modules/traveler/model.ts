@@ -7,22 +7,22 @@ export type Traveler = {
 
 const travelers = new Map<string, Traveler>();
 
-travelers.set('1', {
-    id: '1',
+travelers.set('#traveler1', {
+    id: '#traveler1',
     name: 'John Doe',
     eraOfOrigin: 'MODERN',
-    activeBookings: ['1'],
+    activeBookings: ['#booking1'],
 });
 
-travelers.set('2', {
-    id: '2',
+travelers.set('#traveler2', {
+    id: '#traveler2',
     name: 'Jane Smith',
     eraOfOrigin: 'FUTURE',
-    activeBookings: ['2', '3'],
+    activeBookings: ['#booking2', '#booking3'],
 });
 
-travelers.set('3', {
-    id: '3',
+travelers.set('#traveler3', {
+    id: '#traveler3',
     name: 'Cleopatra',
     eraOfOrigin: 'ANCIENT',
     activeBookings: [],

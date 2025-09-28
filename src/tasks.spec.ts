@@ -1,18 +1,22 @@
-import { afterAll, beforeAll, expect, test } from 'vitest';
+import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
 import { gql } from 'graphql-tag';
 import { server } from './server';
 import { Context, context } from './context';
+import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
 
 let baseContext: Context;
 
-beforeAll(async () => {
+beforeEach(async () => {
     baseContext = await context();
+    __resetBookingDbCallCounter();
 });
 
 afterAll(() => {
-    server.stop()
-})
+    server.stop();
+});
+
 test('Query all travelers', async () => {
+    // ✅ This is already implemented
     const query = gql`
         query {
             travelers {
@@ -41,17 +45,17 @@ test('Query all travelers', async () => {
                 travelers: [
                     {
                         eraOfOrigin: 'MODERN',
-                        id: '1',
+                        id: '#traveler1',
                         name: 'John Doe',
                     },
                     {
                         eraOfOrigin: 'FUTURE',
-                        id: '2',
+                        id: '#traveler2',
                         name: 'Jane Smith',
                     },
                     {
                         eraOfOrigin: 'ANCIENT',
-                        id: '3',
+                        id: '#traveler3',
                         name: 'Cleopatra',
                     },
                 ],
@@ -61,11 +65,12 @@ test('Query all travelers', async () => {
     });
 });
 
-test.skip('Query a traveler by ID', async () => {
-    // https://www.apollographql.com/docs/apollo-server/data/resolvers#defining-a-resolver
+test('Query a traveler by ID', async () => {
+    // 🔧 TASK: Add a 'traveler' query that takes an 'id' parameter
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#defining-a-resolver
     const query = gql`
         query {
-            traveler(id: "1") {
+            traveler(id: "#traveler1") {
                 id
                 name
                 eraOfOrigin
@@ -90,7 +95,7 @@ test.skip('Query a traveler by ID', async () => {
             data: {
                 traveler: {
                     eraOfOrigin: 'MODERN',
-                    id: '1',
+                    id: '#traveler1',
                     name: 'John Doe',
                 },
             },
@@ -100,7 +105,8 @@ test.skip('Query a traveler by ID', async () => {
 });
 
 test.skip('Create a new booking', async () => {
-    // https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
+    // 🔧 TASK: Create a mutation that handles booking creation
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
     const mutation = gql`
         mutation ($input: BookingInput!) {
             createBooking(input: $input) {
@@ -109,9 +115,9 @@ test.skip('Create a new booking', async () => {
                     traveler {
                         name
                     }
-                    # timePeriod {
-                    #     name
-                    # }
+                    timePeriod {
+                        name
+                    }
                     status
                 }
             }
@@ -123,8 +129,8 @@ test.skip('Create a new booking', async () => {
             query: mutation,
             variables: {
                 input: {
-                    travelerId: '1',
-                    timePeriodId: '2',
+                    travelerId: '#traveler1',
+                    timePeriodId: '#timePeriod2',
                 },
             },
         },
@@ -140,7 +146,7 @@ test.skip('Create a new booking', async () => {
         singleResult: {
             data: {
                 createBooking: {
-                    id: '4',
+                    id: '#booking4',
                     status: 'PENDING',
                     traveler: {
                         name: 'John Doe',
@@ -155,8 +161,51 @@ test.skip('Create a new booking', async () => {
     });
 });
 
+test.skip('Find why BookingError is not resolving', async () => {
+    // 🔧 TASK: Fix the union type resolution issue
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
+    const mutation = gql`
+        mutation ($input: BookingInput!) {
+            createBooking(input: $input) {
+                ... on BookingError {
+                    message
+                }
+            }
+        }
+    `;
+    const { body } = await server.executeOperation(
+        {
+            query: mutation,
+            variables: {
+                input: {
+                    travelerId: '#traveler404',
+                    timePeriodId: '#timePeriod2',
+                },
+            },
+        },
+        {
+            contextValue: {
+                ...baseContext,
+            },
+        },
+    );
+
+    expect(body).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                createBooking: {
+                    message: 'Failed to find the traveler.',
+                },
+            },
+            errors: undefined,
+        },
+    });
+});
+
 test.skip('Implement resolvers required for Person interface to work', async () => {
-    // https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
+    // 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
         query {
             people {
@@ -210,51 +259,12 @@ test.skip('Implement resolvers required for Person interface to work', async () 
     });
 });
 
-test.skip('Find why ErrorMessage is not resolving', async () => {
-    const mutation = gql`
-        mutation ($input: BookingInput!) {
-            createBooking(input: $input) {
-                ... on ErrorMessage {
-                    message
-                }
-            }
-        }
-    `;
-    const { body } = await server.executeOperation(
-        {
-            query: mutation,
-            variables: {
-                input: {
-                    travelerId: '404',
-                    timePeriodId: '2',
-                },
-            },
-        },
-        {
-            contextValue: {
-                ...baseContext,
-            },
-        },
-    );
-
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                createBooking: {
-                    message: 'Failed to find the traveler.',
-                },
-            },
-            errors: undefined,
-        },
-    });
-});
-
 test.skip('Get travelers bookings', async () => {
-    // take a look at how resolvers pass their data to each other
+    // 🔧 TASK: Implement resolver chains for the traveler's active bookings
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
     const query = gql`
         query {
-            traveler(id: "1") {
+            traveler(id: "#traveler1") {
                 id
                 activeBookings {
                     id
@@ -284,13 +294,13 @@ test.skip('Get travelers bookings', async () => {
                 traveler: {
                     activeBookings: [
                         {
-                            id: '1',
+                            id: '#booking1',
                             traveler: {
-                                id: '1',
+                                id: '#traveler1',
                             },
                         },
                     ],
-                    id: '1',
+                    id: '#traveler1',
                 },
             },
             errors: undefined,
@@ -299,10 +309,13 @@ test.skip('Get travelers bookings', async () => {
 });
 
 test.skip("Get traveler's name in all CAPs", async () => {
+    // 🔧 TASK: Implement resolver argument handling
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
     const query = gql`
         query ($id: ID!, $toUpperCase: Boolean!) {
             traveler(id: $id) {
                 name(toUpperCase: $toUpperCase)
+                id
             }
         }
     `;
@@ -310,7 +323,7 @@ test.skip("Get traveler's name in all CAPs", async () => {
         {
             query,
             variables: {
-                id: '1',
+                id: '#traveler1',
                 toUpperCase: true,
             },
         },
@@ -327,9 +340,59 @@ test.skip("Get traveler's name in all CAPs", async () => {
             data: {
                 traveler: {
                     name: 'JOHN DOE',
+                    id: '#traveler1',
                 },
             },
             errors: undefined,
         },
     });
+});
+
+test.skip('Get booking should do only one DB call for a booking', async () => {
+    // 🔧 TASK: Solve the n+1 problem
+    // 📖 REFERENCE: https://www.npmjs.com/package/dataloader
+    const query = gql`
+        query {
+            booking(id: "#booking1") {
+                id
+                status
+                traveler {
+                    id
+                    name
+                    eraOfOrigin
+                }
+            }
+        }
+    `;
+    const { body } = await server.executeOperation(
+        {
+            query,
+            variables: {},
+        },
+        {
+            contextValue: {
+                ...baseContext,
+            },
+        },
+    );
+
+    expect(body).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                booking: {
+                    id: '#booking1',
+                    status: 'CONFIRMED',
+                    traveler: {
+                        id: '#traveler1',
+                        name: 'John Doe',
+                        eraOfOrigin: 'MODERN',
+                    },
+                },
+            },
+            errors: undefined,
+        },
+    });
+
+    expect(__getBookingDbCallCounter()).toEqual(1);
 });
