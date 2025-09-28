@@ -48,6 +48,7 @@ export const schema = gql`
         travelers: [Traveler!]!
         traveler(id: ID!): Traveler
         bookings: [Booking!]!
+        booking(id: ID!): Booking
         timePeriods(era: Era): [TimePeriod!]!
         timePeriod(id: ID!): TimePeriod
         people: [Person!]!
@@ -83,9 +84,9 @@ export const schema = gql`
     }
 
     # 6. Unions
-    union BookingOutcome = Booking | ErrorMessage
+    union BookingOutcome = Booking | BookingError
 
-    type ErrorMessage {
+    type BookingError {
         message: String!
     }
 `;

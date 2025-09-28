@@ -1,21 +1,21 @@
 const timePeriods = new Map();
 
-timePeriods.set('1', {
-    id: '1',
+timePeriods.set('#timePeriod1', {
+    id: '#timePeriod1',
     name: 'Ancient Egypt',
     era: 'ANCIENT',
-    majorEvents: ['1', '2'],
+    majorEvents: ['#event1', '#event2'],
 });
 
-timePeriods.set('2', {
-    id: '2',
+timePeriods.set('#timePeriod2', {
+    id: '#timePeriod2',
     name: 'Medieval Europe',
     era: 'MEDIEVAL',
-    majorEvents: ['3'],
+    majorEvents: ['#event3'],
 });
 
-timePeriods.set('3', {
-    id: '3',
+timePeriods.set('#timePeriod3', {
+    id: '#timePeriod3',
     name: 'Future Mars Colony',
     era: 'FUTURE',
     majorEvents: [],

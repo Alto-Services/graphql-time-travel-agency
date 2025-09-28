@@ -3,6 +3,11 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "private": true,
+    "packageManager": "pnpm@9.5.0",
     "scripts": {
         "start": "nodemon --config nodemon.json",
         "test": "LOG_LEVEL=silent vitest"

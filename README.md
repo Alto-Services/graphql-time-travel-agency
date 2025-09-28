@@ -1,10 +1,45 @@
-## Story
+# 🚀 Getting Started
 
-Welcome to ChronoQuest: The Ultimate Time-Travel Agency!
-In the year 2456, time travel is no longer a dream but a commercial reality. At ChronoQuest, we offer our elite clientele the ability to journey through history, witness legendary events, and experience life in ancient civilizations or futuristic worlds. As a backend engineer for ChronoQuest, your job is to ensure that our travelers’ adventures go smoothly by building and managing our in-house booking system.
+Welcome to ChronoQuest! This guide will help you navigate the codebase and understand what you need to implement.
 
-You will interact with a range of colorful travelers—from future-born citizens to historical legends like Cleopatra herself—as they book trips to witness the pyramids being built or brave the Black Plague in Medieval Europe. Your role is to implement the GraphQL backend that handles their bookings, trip information, and real-time updates.
+## 📋 Quick Start Checklist
 
-# What to do?
+- [ ] Run `pnpm install` to install dependencies
+- [ ] Run `pnpm run test` to see current test status
 
-Run `pnpm run test` and find your tasks in the `basics.spec.ts`. Uncomment them one by one and implement the required logic. Good luck!
+## 🎯 What You're Building
+
+You're implementing a GraphQL API for a time-travel booking agency. The system handles:
+
+- **Travelers**: People who want to travel through time
+- **Bookings**: Time-travel reservations
+- **Time Periods**: Historical destinations (Ancient Egypt, Medieval Europe, etc.)
+
+## 🧪 Test Guide
+
+**File**: `src/tasks.spec.ts`  
+**Goal**: Implement core GraphQL functionality
+
+1. **Query all travelers** ✅ (Already working)
+2. **Query traveler by ID** - 🔧 TASK: Add a 'traveler' query that takes an 'id' parameter
+3. **Create a new booking** - 🔧 TASK: Create a mutation that handles booking creation
+4. **BookingError** - 🔧 TASK: Fix the union type resolution issue
+5. **Person interface** - 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
+6. **Get traveler's bookings** - 🔧 TASK: Implement resolver chains for the traveler's active bookings
+7. **Get traveler's name in all CAPs** - 🔧 TASK: Implement resolver argument handling
+8. **Optimize database calls** - 🔧 TASK: Solve the n+1 problem
+
+## 💡 Pro Tips
+
+1. **Read the schema first** - It tells you exactly what types and fields exist
+2. **Look at existing implementations** - The working tests show patterns to follow
+3. **Use TypeScript** - The type system will guide you to correct implementations
+4. **Run tests frequently** - `pnpm run test` after each change
+5. **Don't overthink it** - Start simple and iterate
+
+## 🆘 When You're Stuck
+
+1. **Check the schema** - What fields/types are defined?
+2. **Look at working examples** - How are similar resolvers implemented?
+3. **Read test expectations** - What should the output look like?
+4. **Use TypeScript errors** - They often point to the right solution
