@@ -15,9 +15,7 @@ export const __resetDepartureApiCallStartTime = () => {
 
 export const handlers = [
     // Mock departure times endpoint with unreliable behavior
-    http.get('https://api.easydelorean.com/departures/:era', ({ request, params }) => {
-        const url = new URL(request.url);
-
+    http.get('https://api.easydelorean.com/departures/:era', ({ params }) => {
         // Simulate unreliable API: fail calls until 3 seconds have passed
         if (Date.now() - getStartTime() < 3000) {
             return HttpResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 });

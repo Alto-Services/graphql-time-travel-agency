@@ -1,11 +1,12 @@
 import { gql } from 'graphql-tag';
 import { IncomingMessage } from 'http';
 import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
+import { signedToken } from './auth';
 import { context } from './context';
+import { __resetDepartureApiCallStartTime } from './mocks/handlers';
+import { server as mswServer } from './mocks/setup';
 import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
 import { server } from './server';
-import { server as mswServer } from './mocks/setup';
-import { __resetDepartureApiCallStartTime } from './mocks/handlers';
 
 beforeAll(() => {
     mswServer.listen();
@@ -396,7 +397,9 @@ test.skip('Get bookings for an authenticated user', async () => {
             variables: {},
         },
         {
-            contextValue: await context({ req: { headers: { authorization: '#traveler2' } } as IncomingMessage }),
+            contextValue: await context({
+                req: { headers: { authorization: signedToken({ id: '#traveler2' }) } } as IncomingMessage,
+            }),
         },
     );
 
