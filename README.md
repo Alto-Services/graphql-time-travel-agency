@@ -5,6 +5,7 @@ Welcome to ChronoQuest! This guide will help you navigate the codebase and under
 ## 📋 Quick Start Checklist
 
 - [ ] Run `pnpm install` to install dependencies
+- [ ] Run `pnpm start` to view the server running on http://localhost:10101/
 - [ ] Run `pnpm run test` to see current test status
 
 ## 🎯 What You're Building
@@ -22,13 +23,14 @@ You're implementing a GraphQL API for a time-travel booking agency. The system h
 
 1. **Query all travelers** ✅ (Already working)
 2. **Query a traveler by ID** - 🔧 TASK: Add a 'traveler' query that takes an 'id' parameter
-3. **Create a new booking** - 🔧 TASK: Create a mutation that handles booking creation
-4. **Find why BookingError is not resolving** - 🔧 TASK: Fix the union type resolution issue
-5. **Implement the Person interface** - 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
-6. **Get a traveler's bookings** - 🔧 TASK: Implement resolver chains for the traveler's active bookings
-7. **Get bookings for an authenticated user** - 🔧 TASK: Implement authentication and authorization for the bookings query
-8. **Get the traveler's name in all CAPs** - 🔧 TASK: Implement resolver argument handling  for the traveler query
-9. **Optimize database calls for a booking** - 🔧 TASK: Solve the n+1 problem for the booking query
+3. **Get the traveler's name in all CAPs** - 🔧 TASK: Implement resolver argument handling  for the traveler query
+4. **Create a new booking** - 🔧 TASK: Create a mutation that handles booking creation
+5. **Find why BookingError is not resolving** - 🔧 TASK: Fix the union type resolution issue
+6. **Implement the Person interface** - 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
+7. **Get a traveler's bookings** - 🔧 TASK: Implement resolver chains for the traveler's active bookings
+8. **Get bookings for an authenticated user** - 🔧 TASK: Implement authentication and authorization for the bookings query
+9. **Get departures from the EasyDeLorean API** - 🔧 TASK: Implement resilient service to service communication to fulfill the departures query
+10. **Optimize database calls for a booking** - 🔧 TASK: Solve the n+1 problem for the booking query
 
 ## 💡 Pro Tips
 
