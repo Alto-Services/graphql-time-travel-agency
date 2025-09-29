@@ -1,16 +1,24 @@
 import { gql } from 'graphql-tag';
 import { IncomingMessage } from 'http';
-import { afterAll, beforeEach, expect, test } from 'vitest';
+import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
 import { context } from './context';
 import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
 import { server } from './server';
+import { server as mswServer } from './mocks/setup';
+import { __resetDepartureApiCallStartTime } from './mocks/handlers';
+
+beforeAll(() => {
+    mswServer.listen();
+});
 
 beforeEach(async () => {
     __resetBookingDbCallCounter();
+    __resetDepartureApiCallStartTime();
 });
 
-afterAll(() => {
-    server.stop();
+afterAll(async () => {
+    await server.stop();
+    mswServer.close();
 });
 
 test('Query all travelers', async () => {
@@ -91,6 +99,44 @@ test('Query a traveler by ID', async () => {
                     eraOfOrigin: 'MODERN',
                     id: '#traveler1',
                     name: 'John Doe',
+                },
+            },
+            errors: undefined,
+        },
+    });
+});
+
+test.skip('Get the travelers name in all CAPs', async () => {
+    // 🔧 TASK: Implement resolver argument handling for the traveler query
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
+    const query = gql`
+        query ($id: ID!, $toUpperCase: Boolean!) {
+            traveler(id: $id) {
+                name(toUpperCase: $toUpperCase)
+                id
+            }
+        }
+    `;
+    const { body } = await server.executeOperation(
+        {
+            query,
+            variables: {
+                id: '#traveler1',
+                toUpperCase: true,
+            },
+        },
+        {
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
+        },
+    );
+
+    expect(body).toEqual({
+        kind: 'single',
+        singleResult: {
+            data: {
+                traveler: {
+                    name: 'JOHN DOE',
+                    id: '#traveler1',
                 },
             },
             errors: undefined,
@@ -382,23 +428,26 @@ test.skip('Get bookings for an authenticated user', async () => {
     });
 });
 
-test.skip('Get the travelers name in all CAPs', async () => {
-    // 🔧 TASK: Implement resolver argument handling for the traveler query
-    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
+test.skip('Get departures from the EasyDeLorean API', async () => {
+    // 🔧 TASK: Implement resilient service to service communication to fulfill the departures query
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/fetching-rest
+
     const query = gql`
-        query ($id: ID!, $toUpperCase: Boolean!) {
-            traveler(id: $id) {
-                name(toUpperCase: $toUpperCase)
+        query ($era: Era!) {
+            departures(era: $era) {
                 id
+                departureTime
+                era
+                vehicle
             }
         }
     `;
+
     const { body } = await server.executeOperation(
         {
             query,
             variables: {
-                id: '#traveler1',
-                toUpperCase: true,
+                era: 'FUTURE',
             },
         },
         {
@@ -410,10 +459,14 @@ test.skip('Get the travelers name in all CAPs', async () => {
         kind: 'single',
         singleResult: {
             data: {
-                traveler: {
-                    name: 'JOHN DOE',
-                    id: '#traveler1',
-                },
+                departures: [
+                    {
+                        id: 'departure-1',
+                        era: 'FUTURE',
+                        departureTime: '1985-10-26T10:28:00Z',
+                        vehicle: 'DeLorean DMC-12',
+                    },
+                ],
             },
             errors: undefined,
         },
