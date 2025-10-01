@@ -22,7 +22,7 @@ afterAll(async () => {
     mswServer.close();
 });
 
-test('Query all travelers', async () => {
+test('1. Query all travelers', async () => {
     // ✅ This is already implemented
     const query = gql`
         query {
@@ -70,7 +70,7 @@ test('Query all travelers', async () => {
     });
 });
 
-test('Query a traveler by ID', async () => {
+test('2. Query a traveler by ID', async () => {
     // 🔧 TASK: Add a 'traveler' query that takes an 'id' parameter
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#defining-a-resolver
     const query = gql`
@@ -107,7 +107,7 @@ test('Query a traveler by ID', async () => {
     });
 });
 
-test.skip('Get the travelers name in all CAPs', async () => {
+test.skip('3. Get the travelers name in all CAPs', async () => {
     // 🔧 TASK: Implement resolver argument handling for the traveler query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
     const query = gql`
@@ -145,7 +145,7 @@ test.skip('Get the travelers name in all CAPs', async () => {
     });
 });
 
-test.skip('Create a new booking', async () => {
+test.skip('4. Create a new booking', async () => {
     // 🔧 TASK: Create a mutation that handles booking creation
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
     const mutation = gql`
@@ -200,7 +200,7 @@ test.skip('Create a new booking', async () => {
     });
 });
 
-test.skip('Find why BookingError is not resolving', async () => {
+test.skip('5. Find why BookingError is not resolving', async () => {
     // 🔧 TASK: Fix the union type resolution issue
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const mutation = gql`
@@ -240,7 +240,7 @@ test.skip('Find why BookingError is not resolving', async () => {
     });
 });
 
-test.skip('Implement the Person interface', async () => {
+test.skip('6. Implement the Person interface', async () => {
     // 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
@@ -294,7 +294,7 @@ test.skip('Implement the Person interface', async () => {
     });
 });
 
-test.skip('Get a travelers bookings', async () => {
+test.skip('7. Get a travelers bookings', async () => {
     // 🔧 TASK: Implement resolver chains for the traveler's active bookings
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
     const query = gql`
@@ -341,7 +341,7 @@ test.skip('Get a travelers bookings', async () => {
     });
 });
 
-test.skip('Get bookings for an authenticated user', async () => {
+test.skip('8. Get bookings for an authenticated user', async () => {
     // 🔧 TASK: Implement authentication and authorization for the bookings query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/security/authentication#putting-authenticated-user-info-in-your-contextvalue
     const query = gql`
@@ -431,7 +431,7 @@ test.skip('Get bookings for an authenticated user', async () => {
     });
 });
 
-test.skip('Get departures from the EasyDeLorean API', async () => {
+test.skip('9. Get departures from the EasyDeLorean API', async () => {
     // 🔧 TASK: Implement resilient service to service communication to fulfill the departures query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/fetching-rest
 
@@ -476,7 +476,7 @@ test.skip('Get departures from the EasyDeLorean API', async () => {
     });
 });
 
-test.skip('Optimize database calls for a booking', async () => {
+test.skip('10. Optimize database calls for a booking', async () => {
     // 🔧 TASK: Solve the n+1 problem for the booking query
     // 📖 REFERENCE: https://www.npmjs.com/package/dataloader
     const query = gql`
