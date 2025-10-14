@@ -8,6 +8,16 @@ Welcome to ChronoQuest! This guide will help you navigate the codebase and under
 - [ ] Run `pnpm start` to run the server and explore the Apollo Sandbox on [http://localhost:10101/](http://localhost:10101/)
 - [ ] Run `pnpm test` to see current test status
 
+> [!NOTE]
+> If you don't have `pnpm` installed, you can enable it using [Corepack](https://nodejs.org/api/corepack.html) (comes with Node.js 16.9+):
+> ```bash
+> corepack enable pnpm
+> ```
+> Or install it directly:
+> ```bash
+> npm install --global pnpm
+> ```
+
 ## 🎯 What You're Building
 
 You're implementing a GraphQL API for a time-travel booking agency. The system handles:

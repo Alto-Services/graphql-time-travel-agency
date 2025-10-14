@@ -1,35 +1,6 @@
 import gql from 'graphql-tag';
 
 export const schema = gql`
-    # 1. Basic Types
-    type Traveler {
-        id: ID!
-        name(toUpperCase: Boolean): String!
-        eraOfOrigin: Era!
-        activeBookings: [Booking!]!
-    }
-
-    type Booking {
-        id: ID!
-        traveler: Traveler!
-        timePeriod: TimePeriod!
-        status: BookingStatus!
-    }
-
-    type TimePeriod {
-        id: ID!
-        name: String!
-        era: Era!
-        majorEvents: [Event!]!
-    }
-
-    type Event {
-        id: ID!
-        title: String!
-        date: String!
-    }
-
-    # 2. Enums
     enum Era {
         ANCIENT
         MEDIEVAL
@@ -43,7 +14,55 @@ export const schema = gql`
         CANCELLED
     }
 
-    # 3. Queries
+    interface Person {
+        id: ID!
+        name: String!
+    }
+
+    type Traveler implements Person {
+        id: ID!
+        name(toUpperCase: Boolean): String!
+        eraOfOrigin: Era!
+        activeBookings: [Booking!]!
+    }
+
+    type Guide implements Person {
+        id: ID!
+        name: String!
+        expertise: String!
+    }
+
+    type Event {
+        id: ID!
+        title: String!
+        date: String!
+    }
+
+    type TimePeriod {
+        id: ID!
+        name: String!
+        era: Era!
+        majorEvents: [Event!]!
+    }
+
+    type Booking {
+        id: ID!
+        traveler: Traveler!
+        timePeriod: TimePeriod!
+        status: BookingStatus!
+    }
+
+    type BookingError {
+        message: String!
+    }
+
+    union BookingOutcome = Booking | BookingError
+
+    input BookingInput {
+        travelerId: ID!
+        timePeriodId: ID!
+    }
+
     type Query {
         travelers: [Traveler!]!
         traveler(id: ID!): Traveler
@@ -54,39 +73,8 @@ export const schema = gql`
         people: [Person!]!
     }
 
-    # 4. Mutations
-    input BookingInput {
-        travelerId: ID!
-        timePeriodId: ID!
-    }
-
     type Mutation {
         createBooking(input: BookingInput!): BookingOutcome!
         updateBookingStatus(bookingId: ID!, status: BookingStatus!): Booking!
-    }
-
-    # 5. Interfaces
-    interface Person {
-        id: ID!
-        name: String!
-    }
-
-    type Traveler implements Person {
-        id: ID!
-        name: String!
-        eraOfOrigin: Era!
-    }
-
-    type Guide implements Person {
-        id: ID!
-        name: String!
-        expertise: String!
-    }
-
-    # 6. Unions
-    union BookingOutcome = Booking | BookingError
-
-    type BookingError {
-        message: String!
     }
 `;
