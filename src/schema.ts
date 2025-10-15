@@ -27,7 +27,7 @@ export const schema = gql`
         id: ID!
         name(capitalize: Boolean): String!
         eraOfOrigin: Era!
-        activeBookings: [Booking!]!
+        bookings: [Booking!]!
     }
 
     type Guide implements Person {
@@ -36,17 +36,10 @@ export const schema = gql`
         expertise: String!
     }
 
-    type Event {
-        id: ID!
-        title: String!
-        date: String!
-    }
-
     type TimePeriod {
         id: ID!
         name: String!
         era: Era!
-        majorEvents: [Event!]!
     }
 
     type Booking {
@@ -72,8 +65,6 @@ export const schema = gql`
         traveler(id: TravelerID!): Traveler
         bookings: [Booking!]!
         booking(id: BookingID!): Booking
-        timePeriods(era: Era): [TimePeriod!]!
-        timePeriod(id: TimePeriodID!): TimePeriod
         people: [Person!]!
     }
 
