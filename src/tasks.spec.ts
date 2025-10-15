@@ -8,6 +8,11 @@ import { server as mswServer } from './mocks/setup';
 import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
 import { server } from './server';
 
+const execute = async (...args: Parameters<typeof server.executeOperation>) => {
+    const { body } = await server.executeOperation(...args);
+    return body.kind === 'single' ? body.singleResult : body.initialResult;
+};
+
 beforeAll(() => {
     mswServer.listen();
 });
@@ -33,7 +38,7 @@ test('1. Query all travelers', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {},
@@ -43,29 +48,25 @@ test('1. Query all travelers', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                travelers: [
-                    {
-                        eraOfOrigin: 'MODERN',
-                        id: '#traveler1',
-                        name: 'John Doe',
-                    },
-                    {
-                        eraOfOrigin: 'FUTURE',
-                        id: '#traveler2',
-                        name: 'Jane Smith',
-                    },
-                    {
-                        eraOfOrigin: 'ANCIENT',
-                        id: '#traveler3',
-                        name: 'Cleopatra',
-                    },
-                ],
-            },
-            errors: undefined,
+    expect(response).toEqual({
+        data: {
+            travelers: [
+                {
+                    eraOfOrigin: 'MODERN',
+                    id: '#traveler1',
+                    name: 'John Doe',
+                },
+                {
+                    eraOfOrigin: 'FUTURE',
+                    id: '#traveler2',
+                    name: 'Jane Smith',
+                },
+                {
+                    eraOfOrigin: 'ANCIENT',
+                    id: '#traveler3',
+                    name: 'Cleopatra',
+                },
+            ],
         },
     });
 });
@@ -82,7 +83,7 @@ test('2. Query a traveler by ID', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {},
@@ -92,17 +93,13 @@ test('2. Query a traveler by ID', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                traveler: {
-                    eraOfOrigin: 'MODERN',
-                    id: '#traveler1',
-                    name: 'John Doe',
-                },
+    expect(response).toEqual({
+        data: {
+            traveler: {
+                eraOfOrigin: 'MODERN',
+                id: '#traveler1',
+                name: 'John Doe',
             },
-            errors: undefined,
         },
     });
 });
@@ -118,7 +115,7 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {
@@ -131,16 +128,12 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                traveler: {
-                    name: 'JOHN DOE',
-                    id: '#traveler1',
-                },
+    expect(response).toEqual({
+        data: {
+            traveler: {
+                name: 'JOHN DOE',
+                id: '#traveler1',
             },
-            errors: undefined,
         },
     });
 });
@@ -165,7 +158,7 @@ test.skip('4. Create a new booking', async () => {
         }
     `;
 
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query: mutation,
             variables: {
@@ -180,22 +173,18 @@ test.skip('4. Create a new booking', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                createBooking: {
-                    id: '#booking4',
-                    status: 'PENDING',
-                    traveler: {
-                        name: 'John Doe',
-                    },
-                    timePeriod: {
-                        name: 'Medieval Europe',
-                    },
+    expect(response).toEqual({
+        data: {
+            createBooking: {
+                id: '#booking4',
+                status: 'PENDING',
+                traveler: {
+                    name: 'John Doe',
+                },
+                timePeriod: {
+                    name: 'Medieval Europe',
                 },
             },
-            errors: undefined,
         },
     });
 });
@@ -212,7 +201,7 @@ test.skip('5. Find why BookingError is not resolving', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query: mutation,
             variables: {
@@ -227,15 +216,11 @@ test.skip('5. Find why BookingError is not resolving', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                createBooking: {
-                    message: 'Failed to find the traveler.',
-                },
+    expect(response).toEqual({
+        data: {
+            createBooking: {
+                message: 'Failed to find the traveler.',
             },
-            errors: undefined,
         },
     });
 });
@@ -256,7 +241,7 @@ test.skip('6. Implement the Person interface', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {},
@@ -266,30 +251,26 @@ test.skip('6. Implement the Person interface', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                people: [
-                    {
-                        eraOfOrigin: 'MODERN',
-                        name: 'John Doe',
-                    },
-                    {
-                        eraOfOrigin: 'FUTURE',
-                        name: 'Jane Smith',
-                    },
-                    {
-                        eraOfOrigin: 'ANCIENT',
-                        name: 'Cleopatra',
-                    },
-                    {
-                        expertise: '42',
-                        name: 'The Universe',
-                    },
-                ],
-            },
-            errors: undefined,
+    expect(response).toEqual({
+        data: {
+            people: [
+                {
+                    eraOfOrigin: 'MODERN',
+                    name: 'John Doe',
+                },
+                {
+                    eraOfOrigin: 'FUTURE',
+                    name: 'Jane Smith',
+                },
+                {
+                    eraOfOrigin: 'ANCIENT',
+                    name: 'Cleopatra',
+                },
+                {
+                    expertise: '42',
+                    name: 'The Universe',
+                },
+            ],
         },
     });
 });
@@ -310,7 +291,7 @@ test.skip('7. Get a travelers bookings', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {},
@@ -320,23 +301,19 @@ test.skip('7. Get a travelers bookings', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                traveler: {
-                    activeBookings: [
-                        {
-                            id: '#booking1',
-                            traveler: {
-                                id: '#traveler1',
-                            },
+    expect(response).toEqual({
+        data: {
+            traveler: {
+                activeBookings: [
+                    {
+                        id: '#booking1',
+                        traveler: {
+                            id: '#traveler1',
                         },
-                    ],
-                    id: '#traveler1',
-                },
+                    },
+                ],
+                id: '#traveler1',
             },
-            errors: undefined,
         },
     });
 });
@@ -357,7 +334,7 @@ test.skip('8. Get bookings for an authenticated user', async () => {
         }
     `;
 
-    const { body: unauthenticated } = await server.executeOperation(
+    const unauthenticatedResponse = await execute(
         {
             query,
             variables: {},
@@ -368,30 +345,27 @@ test.skip('8. Get bookings for an authenticated user', async () => {
     );
 
     // 1. Unauthenticated user should not see any bookings
-    expect(unauthenticated).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: null,
-            errors: [
-                {
-                    message: 'Authentication required',
-                    extensions: {
-                        code: 'UNAUTHENTICATED',
-                    },
-                    locations: [
-                        {
-                            column: 3,
-                            line: 2,
-                        },
-                    ],
-                    path: ['bookings'],
+    expect(unauthenticatedResponse).toEqual({
+        data: null,
+        errors: [
+            {
+                message: 'Authentication required',
+                extensions: {
+                    code: 'UNAUTHENTICATED',
                 },
-            ],
-        },
+                locations: [
+                    {
+                        column: 3,
+                        line: 2,
+                    },
+                ],
+                path: ['bookings'],
+            },
+        ],
     });
 
     // 2. Authenticated user should only see their own bookings
-    const { body: authenticated } = await server.executeOperation(
+    const authenticatedResponse = await execute(
         {
             query,
             variables: {},
@@ -403,30 +377,26 @@ test.skip('8. Get bookings for an authenticated user', async () => {
         },
     );
 
-    expect(authenticated).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                bookings: [
-                    {
-                        id: '#booking2',
-                        status: 'PENDING',
-                        traveler: {
-                            id: '#traveler2',
-                            name: 'Jane Smith',
-                        },
+    expect(authenticatedResponse).toEqual({
+        data: {
+            bookings: [
+                {
+                    id: '#booking2',
+                    status: 'PENDING',
+                    traveler: {
+                        id: '#traveler2',
+                        name: 'Jane Smith',
                     },
-                    {
-                        id: '#booking3',
-                        status: 'CANCELLED',
-                        traveler: {
-                            id: '#traveler2',
-                            name: 'Jane Smith',
-                        },
+                },
+                {
+                    id: '#booking3',
+                    status: 'CANCELLED',
+                    traveler: {
+                        id: '#traveler2',
+                        name: 'Jane Smith',
                     },
-                ],
-            },
-            errors: undefined,
+                },
+            ],
         },
     });
 });
@@ -446,7 +416,7 @@ test.skip('9. Get departures from the EasyDeLorean API', async () => {
         }
     `;
 
-    const { body } = await server.executeOperation(
+    const response = await execute(
         {
             query,
             variables: {
@@ -458,20 +428,16 @@ test.skip('9. Get departures from the EasyDeLorean API', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                departures: [
-                    {
-                        id: 'departure-1',
-                        era: 'FUTURE',
-                        departureTime: '1985-10-26T10:28:00Z',
-                        vehicle: 'DeLorean DMC-12',
-                    },
-                ],
-            },
-            errors: undefined,
+    expect(response).toEqual({
+        data: {
+            departures: [
+                {
+                    id: 'departure-1',
+                    era: 'FUTURE',
+                    departureTime: '1985-10-26T10:28:00Z',
+                    vehicle: 'DeLorean DMC-12',
+                },
+            ],
         },
     });
 });
@@ -492,7 +458,8 @@ test.skip('10. Optimize database calls for a booking', async () => {
             }
         }
     `;
-    const { body } = await server.executeOperation(
+
+    const response = await execute(
         {
             query,
             variables: {},
@@ -502,21 +469,17 @@ test.skip('10. Optimize database calls for a booking', async () => {
         },
     );
 
-    expect(body).toEqual({
-        kind: 'single',
-        singleResult: {
-            data: {
-                booking: {
-                    id: '#booking1',
-                    status: 'CONFIRMED',
-                    traveler: {
-                        id: '#traveler1',
-                        name: 'John Doe',
-                        eraOfOrigin: 'MODERN',
-                    },
+    expect(response).toEqual({
+        data: {
+            booking: {
+                id: '#booking1',
+                status: 'CONFIRMED',
+                traveler: {
+                    id: '#traveler1',
+                    name: 'John Doe',
+                    eraOfOrigin: 'MODERN',
                 },
             },
-            errors: undefined,
         },
     });
 

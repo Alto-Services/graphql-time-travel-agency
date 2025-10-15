@@ -10,7 +10,8 @@
     "packageManager": "pnpm@9.5.0",
     "scripts": {
         "start": "tsx watch src/main.ts",
-        "test": "LOG_LEVEL=silent vitest"
+        "test": "LOG_LEVEL=silent vitest",
+        "test:ui": "LOG_LEVEL=silent vitest --ui"
     },
     "keywords": [],
     "author": "",
@@ -36,6 +37,7 @@
         "@typescript-eslint/eslint-plugin": "^6.15.0",
         "@typescript-eslint/eslint-plugin-tslint": "^6.15.0",
         "@typescript-eslint/parser": "^6.15.0",
+        "@vitest/ui": "3.2.4",
         "eslint": "^8.48.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^9.1.0",
@@ -51,6 +53,6 @@
         "tsx": "^4.19.2",
         "typescript": "5.3.3",
         "unplugin-swc": "^1.5.1",
-        "vitest": "^2.1.2"
+        "vitest": "^3.2.4"
     }
 }
