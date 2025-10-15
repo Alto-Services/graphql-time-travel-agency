@@ -42,12 +42,12 @@ You're implementing a GraphQL API for a time-travel booking agency. The system h
     - [ ] 🔧 Implement resolver argument handling for the traveler query
 4. **Creating a new booking returns nested traveler and timePeriod objects**
     - [ ] 🔧 Implement field resolvers for the Booking type
-5. **Find why BookingError is not resolving**
-    - [ ] 🔧 Fix the union type resolution issue
-6. **Implement the Person interface**
-    - [ ] 🔧 Resolve the Person interface to distinguish Traveler vs Guide
-7. **Get a traveler's bookings**
+5. **Get a traveler's bookings**
     - [ ] 🔧 Implement resolver chains for the traveler's active bookings
+6. **Find why BookingError is not resolving**
+    - [ ] 🔧 Fix the union type resolution issue
+7. **Implement the Person interface**
+    - [ ] 🔧 Resolve the Person interface to distinguish Traveler vs Guide
 8. **Get bookings for an authenticated user**
     - [ ] 🔧 Implement authentication and authorization for the bookings query
 9. **Get departures from the EasyDeLorean API**
