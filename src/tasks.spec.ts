@@ -189,7 +189,50 @@ test.skip('4. Creating a new booking returns nested traveler and timePeriod obje
     });
 });
 
-test.skip('5. Find why BookingError is not resolving', async () => {
+test.skip('5. Get a travelers bookings', async () => {
+    // 🔧 TASK: Implement resolver chains for the traveler's active bookings
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
+    const query = gql`
+        query {
+            traveler(id: "#traveler1") {
+                id
+                activeBookings {
+                    id
+                    traveler {
+                        id
+                    }
+                }
+            }
+        }
+    `;
+    const response = await execute(
+        {
+            query,
+            variables: {},
+        },
+        {
+            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
+        },
+    );
+
+    expect(response).toEqual({
+        data: {
+            traveler: {
+                activeBookings: [
+                    {
+                        id: '#booking1',
+                        traveler: {
+                            id: '#traveler1',
+                        },
+                    },
+                ],
+                id: '#traveler1',
+            },
+        },
+    });
+});
+
+test.skip('6. Find why BookingError is not resolving', async () => {
     // 🔧 TASK: Fix the union type resolution issue
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const mutation = gql`
@@ -225,7 +268,7 @@ test.skip('5. Find why BookingError is not resolving', async () => {
     });
 });
 
-test.skip('6. Implement the Person interface', async () => {
+test.skip('7. Implement the Person interface', async () => {
     // 🔧 TASK: Resolve the Person interface to distinguish Traveler vs Guide
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces
     const query = gql`
@@ -271,49 +314,6 @@ test.skip('6. Implement the Person interface', async () => {
                     name: 'The Universe',
                 },
             ],
-        },
-    });
-});
-
-test.skip('7. Get a travelers bookings', async () => {
-    // 🔧 TASK: Implement resolver chains for the traveler's active bookings
-    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
-    const query = gql`
-        query {
-            traveler(id: "#traveler1") {
-                id
-                activeBookings {
-                    id
-                    traveler {
-                        id
-                    }
-                }
-            }
-        }
-    `;
-    const response = await execute(
-        {
-            query,
-            variables: {},
-        },
-        {
-            contextValue: await context({ req: { headers: {} } as IncomingMessage }),
-        },
-    );
-
-    expect(response).toEqual({
-        data: {
-            traveler: {
-                activeBookings: [
-                    {
-                        id: '#booking1',
-                        traveler: {
-                            id: '#traveler1',
-                        },
-                    },
-                ],
-                id: '#traveler1',
-            },
         },
     });
 });
