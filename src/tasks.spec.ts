@@ -190,16 +190,17 @@ test.skip('4. Creating a new booking returns nested traveler and timePeriod obje
 });
 
 test.skip('5. Get a travelers bookings', async () => {
-    // 🔧 TASK: Implement resolver chains for the traveler's active bookings
+    // 🔧 TASK: Implement resolver chains for the traveler's bookings
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
     const query = gql`
         query {
-            traveler(id: "#traveler1") {
+            traveler(id: "#traveler2") {
                 id
-                activeBookings {
+                bookings {
                     id
                     traveler {
                         id
+                        name
                     }
                 }
             }
@@ -218,15 +219,23 @@ test.skip('5. Get a travelers bookings', async () => {
     expect(response).toEqual({
         data: {
             traveler: {
-                activeBookings: [
+                bookings: [
                     {
-                        id: '#booking1',
+                        id: '#booking2',
                         traveler: {
-                            id: '#traveler1',
+                            id: '#traveler2',
+                            name: 'Jane Smith',
+                        },
+                    },
+                    {
+                        id: '#booking3',
+                        traveler: {
+                            id: '#traveler2',
+                            name: 'Jane Smith',
                         },
                     },
                 ],
-                id: '#traveler1',
+                id: '#traveler2',
             },
         },
     });

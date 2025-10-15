@@ -43,7 +43,7 @@ You're implementing a GraphQL API for a time-travel booking agency. The system h
 4. **Creating a new booking returns nested traveler and timePeriod objects**
     - [ ] 🔧 Implement field resolvers for the Booking type
 5. **Get a traveler's bookings**
-    - [ ] 🔧 Implement resolver chains for the traveler's active bookings
+    - [ ] 🔧 Implement resolver chains for the traveler's bookings
 6. **Find why BookingError is not resolving**
     - [ ] 🔧 Fix the union type resolution issue
 7. **Implement the Person interface**

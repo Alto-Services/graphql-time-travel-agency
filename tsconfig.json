@@ -16,7 +16,6 @@
             "*": ["node_modules/*"]
         },
         "lib": ["ES2020", "ESNext"],
-        "types": ["vitest/globals"],
         "typeRoots": ["./node_modules/@types", "./src/types", "./src/middlewares/expressContext.d.ts"]
     },
     "include": ["src/**/*", "src"],
