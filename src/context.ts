@@ -1,5 +1,5 @@
-import { getTravelerById } from './modules/traveler/model';
-import { getBookingById } from './modules/booking/model';
+import { getTravelerById } from './modules/traveler/datasource';
+import { getBookingById } from './modules/booking/datasource';
 import { IncomingMessage } from 'http';
 
 export type Context = {

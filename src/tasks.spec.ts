@@ -5,7 +5,7 @@ import { signedToken } from './auth';
 import { context } from './context';
 import { __resetDepartureApiCallStartTime } from './mocks/handlers';
 import { server as mswServer } from './mocks/setup';
-import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/model';
+import { __getBookingDbCallCounter, __resetBookingDbCallCounter } from './modules/booking/datasource';
 import { server } from './server';
 
 const execute = async (...args: Parameters<typeof server.executeOperation>) => {
@@ -108,7 +108,7 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
     // 🔧 TASK: Implement resolver argument handling for the traveler query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
     const query = gql`
-        query ($id: ID!, $capitalize: Boolean!) {
+        query ($id: TravelerID!, $capitalize: Boolean!) {
             traveler(id: $id) {
                 name(capitalize: $capitalize)
                 id

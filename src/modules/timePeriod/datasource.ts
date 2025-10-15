@@ -1,4 +1,11 @@
-const timePeriods = new Map();
+export type TimePeriod = {
+    id: string;
+    name: string;
+    era: 'ANCIENT' | 'MEDIEVAL' | 'FUTURE';
+    majorEvents: string[];
+};
+
+const timePeriods = new Map<string, TimePeriod>();
 
 timePeriods.set('#timePeriod1', {
     id: '#timePeriod1',
