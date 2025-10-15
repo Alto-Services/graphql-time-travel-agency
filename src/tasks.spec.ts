@@ -138,9 +138,9 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
     });
 });
 
-test.skip('4. Create a new booking', async () => {
-    // 🔧 TASK: Create a mutation that handles booking creation
-    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#passing-resolvers-to-apollo-server
+test.skip('4. Creating a new booking returns nested traveler and timePeriod objects', async () => {
+    // 🔧 TASK: Implement field resolvers for the Booking type
+    // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
     const mutation = gql`
         mutation ($input: BookingInput!) {
             createBooking(input: $input) {

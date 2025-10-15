@@ -40,8 +40,8 @@ You're implementing a GraphQL API for a time-travel booking agency. The system h
     - [ ] 🔧 Add a 'traveler' query that takes an 'id' parameter
 3. **Get the traveler's name in all CAPs**
     - [ ] 🔧 Implement resolver argument handling for the traveler query
-4. **Create a new booking**
-    - [ ] 🔧 Create a mutation that handles booking creation
+4. **Creating a new booking returns nested traveler and timePeriod objects**
+    - [ ] 🔧 Implement field resolvers for the Booking type
 5. **Find why BookingError is not resolving**
     - [ ] 🔧 Fix the union type resolution issue
 6. **Implement the Person interface**
