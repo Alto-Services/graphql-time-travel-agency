@@ -108,9 +108,9 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
     // 🔧 TASK: Implement resolver argument handling for the traveler query
     // 📖 REFERENCE: https://www.apollographql.com/docs/apollo-server/data/resolvers#handling-arguments
     const query = gql`
-        query ($id: ID!, $toUpperCase: Boolean!) {
+        query ($id: ID!, $capitalize: Boolean!) {
             traveler(id: $id) {
-                name(toUpperCase: $toUpperCase)
+                name(capitalize: $capitalize)
                 id
             }
         }
@@ -120,7 +120,7 @@ test.skip('3. Get the travelers name in all CAPs', async () => {
             query,
             variables: {
                 id: '#traveler1',
-                toUpperCase: true,
+                capitalize: true,
             },
         },
         {

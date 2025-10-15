@@ -21,7 +21,7 @@ export const schema = gql`
 
     type Traveler implements Person {
         id: ID!
-        name(toUpperCase: Boolean): String!
+        name(capitalize: Boolean): String!
         eraOfOrigin: Era!
         activeBookings: [Booking!]!
     }
