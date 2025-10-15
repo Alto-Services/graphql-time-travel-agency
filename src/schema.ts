@@ -1,6 +1,10 @@
 import gql from 'graphql-tag';
 
 export const schema = gql`
+    scalar TravelerID
+    scalar TimePeriodID
+    scalar BookingID
+
     enum Era {
         ANCIENT
         MEDIEVAL
@@ -59,22 +63,22 @@ export const schema = gql`
     union BookingOutcome = Booking | BookingError
 
     input BookingInput {
-        travelerId: ID!
-        timePeriodId: ID!
+        travelerId: TravelerID!
+        timePeriodId: TimePeriodID!
     }
 
     type Query {
         travelers: [Traveler!]!
-        traveler(id: ID!): Traveler
+        traveler(id: TravelerID!): Traveler
         bookings: [Booking!]!
-        booking(id: ID!): Booking
+        booking(id: BookingID!): Booking
         timePeriods(era: Era): [TimePeriod!]!
-        timePeriod(id: ID!): TimePeriod
+        timePeriod(id: TimePeriodID!): TimePeriod
         people: [Person!]!
     }
 
     type Mutation {
         createBooking(input: BookingInput!): BookingOutcome!
-        updateBookingStatus(bookingId: ID!, status: BookingStatus!): Booking!
+        updateBookingStatus(bookingId: BookingID!, status: BookingStatus!): Booking!
     }
 `;

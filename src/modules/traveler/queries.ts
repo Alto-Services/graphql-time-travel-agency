@@ -1,4 +1,4 @@
-import { getTravelerById, listAllTravelers } from './model';
+import { getTravelerById, listAllTravelers } from './datasource';
 
 export const travelerQueries = () => ({
     travelers: () => listAllTravelers(),

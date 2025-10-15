@@ -1,21 +1,16 @@
-import { z } from 'zod';
-import { createBooking, getBookingById } from './model';
+import { createBooking, getBookingById } from './datasource';
 import { Context } from '../../context';
 
-const createBookingArgs = z.object({
-    input: z.object({
-        travelerId: z.string(),
-        timePeriodId: z.string(),
-    }),
-});
+type CreateBookingArgs = {
+    input: {
+        travelerId: string;
+        timePeriodId: string;
+    };
+};
 
 export const bookingMutations = () => ({
-    createBooking: (parent: unknown, args: unknown, { getTravelerById }: Context) => {
-        const maybeArgs = createBookingArgs.safeParse(args);
-        if (!maybeArgs.success) {
-            throw new Error('Invalid args');
-        }
-        const { timePeriodId, travelerId } = maybeArgs.data.input;
+    createBooking: (parent: unknown, args: CreateBookingArgs, { getTravelerById }: Context) => {
+        const { timePeriodId, travelerId } = args.input;
 
         if (!getTravelerById(travelerId)) {
             return {
@@ -24,8 +19,8 @@ export const bookingMutations = () => ({
         }
 
         return createBooking({
-            traveler: travelerId,
-            timePeriod: timePeriodId,
+            travelerId,
+            timePeriodId,
             status: 'PENDING',
         });
     },

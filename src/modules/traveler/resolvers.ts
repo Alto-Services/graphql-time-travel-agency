@@ -1,5 +1,5 @@
 import { Context } from '../../context';
-import { Traveler } from './model';
+import { Traveler } from './datasource';
 
 type TravelerResolverParent = { id: string } & Partial<Traveler>;
 

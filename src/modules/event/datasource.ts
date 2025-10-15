@@ -1,4 +1,10 @@
-const events = new Map();
+export type Event = {
+    id: string;
+    title: string;
+    date: string;
+};
+
+const events = new Map<string, Event>();
 
 events.set('#event1', {
     id: '#event1',
