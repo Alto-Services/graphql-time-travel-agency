@@ -147,10 +147,14 @@ test.skip('4. Creating a new booking returns nested traveler and timePeriod obje
                 ... on Booking {
                     id
                     traveler {
+                        id
                         name
+                        eraOfOrigin
                     }
                     timePeriod {
+                        id
                         name
+                        era
                     }
                     status
                 }
@@ -179,10 +183,14 @@ test.skip('4. Creating a new booking returns nested traveler and timePeriod obje
                 id: '#booking4',
                 status: 'PENDING',
                 traveler: {
+                    id: '#traveler1',
                     name: 'John Doe',
+                    eraOfOrigin: 'MODERN',
                 },
                 timePeriod: {
+                    id: '#timePeriod2',
                     name: 'Medieval Europe',
+                    era: 'MEDIEVAL',
                 },
             },
         },
@@ -196,11 +204,19 @@ test.skip('5. Get a travelers bookings', async () => {
         query {
             traveler(id: "#traveler2") {
                 id
+                name
                 bookings {
                     id
+                    status
+                    timePeriod {
+                        id
+                        name
+                        era
+                    }
                     traveler {
                         id
                         name
+                        eraOfOrigin
                     }
                 }
             }
@@ -219,23 +235,38 @@ test.skip('5. Get a travelers bookings', async () => {
     expect(response).toEqual({
         data: {
             traveler: {
+                id: '#traveler2',
+                name: 'Jane Smith',
                 bookings: [
                     {
                         id: '#booking2',
+                        status: 'PENDING',
                         traveler: {
                             id: '#traveler2',
                             name: 'Jane Smith',
+                            eraOfOrigin: 'FUTURE',
+                        },
+                        timePeriod: {
+                            id: '#timePeriod2',
+                            name: 'Medieval Europe',
+                            era: 'MEDIEVAL',
                         },
                     },
                     {
                         id: '#booking3',
+                        status: 'CANCELLED',
                         traveler: {
                             id: '#traveler2',
                             name: 'Jane Smith',
+                            eraOfOrigin: 'FUTURE',
+                        },
+                        timePeriod: {
+                            id: '#timePeriod3',
+                            name: 'Future Mars Colony',
+                            era: 'FUTURE',
                         },
                     },
                 ],
-                id: '#traveler2',
             },
         },
     });
